@@ -16,4 +16,13 @@ public interface CommunityConstant {
      */
     static final int ACTIVATION_FAILURE = 2;
 
+    /**
+     * 默认的登录凭证时间
+     */
+    static final int DEFAULT_EXPIRED_SECONDS = 3600 * 12;
+
+    /**
+     * 选择记住我以后
+     */
+    static final int REMEMBER_EXPIRED_SECONDS = 100 * 3600 * 24;
 }
