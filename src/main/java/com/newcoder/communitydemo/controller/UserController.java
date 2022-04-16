@@ -1,5 +1,6 @@
 package com.newcoder.communitydemo.controller;
 
+import com.newcoder.communitydemo.annotation.LoginRequired;
 import com.newcoder.communitydemo.entity.User;
 import com.newcoder.communitydemo.service.UserService;
 import com.newcoder.communitydemo.util.CommunityUtil;
@@ -46,6 +47,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/setting")
+    @LoginRequired
     public String getSettingPage() {
         return "/site/setting";
     }
@@ -54,6 +56,7 @@ public class UserController {
      * 配置头像
      */
     @PostMapping("/upload")
+    @LoginRequired
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
             model.addAttribute("error", "还没上传图片");
@@ -114,6 +117,7 @@ public class UserController {
      * 修改密码
      */
     @PostMapping("/modifyPassword")
+    @LoginRequired
     public String modifyPassword(String oldPassword, String newPassword, Model model) {
         User user = hostHolder.getUser();
 
