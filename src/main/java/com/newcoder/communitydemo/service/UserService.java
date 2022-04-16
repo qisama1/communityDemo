@@ -150,4 +150,44 @@ public class UserService implements CommunityConstant {
     public void logout(String ticket) {
         loginTicketMapper.updateStatus(ticket, 1);
     }
+
+    /**
+     * 找到Cookie中ticket对于的loginTicket对象，便于之后找到User
+     * @param ticket
+     * @return
+     */
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    /**
+     * 更新头像url
+     * @param userId
+     * @param headerUrl
+     * @return
+     */
+    public int updateHeader(int userId, String headerUrl) {
+        return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    /**
+     * 修改密码
+     */
+    public String modifyPassword(int userId, String salt, String originPassword, String oldPassword, String newPassword) {
+
+        // 对空值进行判断
+        if (StringUtils.isBlank(oldPassword)) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
+        System.out.println(originPassword + " " + oldPassword);
+        if (!originPassword.equals(CommunityUtil.md5(oldPassword + salt))) {
+            return "原密码输入不正确";
+        }
+        userMapper.updatePassword(userId, newPassword);
+        return "修改成功";
+    }
+
 }
