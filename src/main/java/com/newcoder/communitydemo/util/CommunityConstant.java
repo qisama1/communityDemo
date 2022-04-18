@@ -25,4 +25,13 @@ public interface CommunityConstant {
      * 选择记住我以后
      */
     static final int REMEMBER_EXPIRED_SECONDS = 100 * 3600 * 24;
+
+    /**
+     * 实体类型、帖子
+     */
+    static final int ENTITY_TYPE_POST = 1;
+    /**
+     * 实体类型、常量
+     */
+    static final int ENTITY_TYPE_COMMENT = 2;
 }

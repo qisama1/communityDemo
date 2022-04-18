@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Date;
 import java.util.List;
@@ -25,7 +29,8 @@ public class MapperTest {
     private UserMapper mapper;
     @Autowired
     private DiscussPostMapper discussPostMapper;
-
+    @Autowired
+    private TransactionTemplate transactionTemplate;
     @Autowired
     private LoginTicketMapper loginTicketMapper;
 
@@ -64,5 +69,7 @@ public class MapperTest {
         loginTicketMapper.updateStatus("abc", 1);
         loginTicket = loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
+
+
     }
 }
