@@ -3,9 +3,11 @@ package com.newcoder.communitydemo;
 import com.mysql.cj.log.Log;
 import com.newcoder.communitydemo.dao.DiscussPostMapper;
 import com.newcoder.communitydemo.dao.LoginTicketMapper;
+import com.newcoder.communitydemo.dao.MessageMapper;
 import com.newcoder.communitydemo.dao.UserMapper;
 import com.newcoder.communitydemo.entity.DiscussPost;
 import com.newcoder.communitydemo.entity.LoginTicket;
+import com.newcoder.communitydemo.entity.Message;
 import com.newcoder.communitydemo.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +35,8 @@ public class MapperTest {
     private TransactionTemplate transactionTemplate;
     @Autowired
     private LoginTicketMapper loginTicketMapper;
-
+    @Autowired
+    private MessageMapper messageMapper;
     @Test
     public void testSelectUser() {
         System.out.println(mapper.selectByName("niuke"));
@@ -71,5 +74,20 @@ public class MapperTest {
         System.out.println(loginTicket);
 
 
+    }
+    @Test
+    public void testMessage() {
+        List<Message> messages = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : messages) {
+            System.out.println(message);
+        }
+        System.out.println(messageMapper.selectConversationCount(111));
+
+        List<Message> messages1 = messageMapper.selectLetters("111_112", 0, 10);
+        for (Message message:
+             messages1) {
+            System.out.println(message);
+        }
+        System.out.println(messageMapper.selectLetterCount("111_112"));
     }
 }

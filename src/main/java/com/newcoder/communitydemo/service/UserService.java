@@ -190,4 +190,8 @@ public class UserService implements CommunityConstant {
         return "修改成功";
     }
 
+    public User findUserByName(String userName) {
+        return userMapper.selectByName(userName);
+    }
+
 }
