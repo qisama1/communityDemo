@@ -2,6 +2,7 @@ package com.newcoder.communitydemo.controller;
 
 import com.newcoder.communitydemo.annotation.LoginRequired;
 import com.newcoder.communitydemo.entity.User;
+import com.newcoder.communitydemo.service.LikeService;
 import com.newcoder.communitydemo.service.UserService;
 import com.newcoder.communitydemo.util.CommunityUtil;
 import com.newcoder.communitydemo.util.HostHolder;
@@ -40,8 +41,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private LikeService likeService;
     /**
      * 设置页面
      * @return
@@ -127,5 +132,22 @@ public class UserController {
             return "/site/setting";
         }
         return "redirect:/index";
+    }
+
+    // 个人主页
+    @GetMapping("/profile/{userId}")
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        System.out.println(user.toString());
+        if (user == null) {
+            throw new RuntimeException("该用户不存在");
+        }
+        // 用户的基本信息
+        model.addAttribute("user", user);
+        // 点赞数
+        int userLikeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", userLikeCount);
+
+        return "/site/profile";
     }
 }
