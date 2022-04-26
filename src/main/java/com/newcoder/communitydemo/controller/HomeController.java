@@ -4,7 +4,10 @@ import com.newcoder.communitydemo.entity.DiscussPost;
 import com.newcoder.communitydemo.entity.Page;
 import com.newcoder.communitydemo.entity.User;
 import com.newcoder.communitydemo.service.DiscussPostService;
+import com.newcoder.communitydemo.service.LikeService;
 import com.newcoder.communitydemo.service.UserService;
+import com.newcoder.communitydemo.util.CommunityConstant;
+import com.newcoder.communitydemo.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +19,15 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping("/index")
     public String getIndexPage(Model model, Page page) {
@@ -36,6 +42,9 @@ public class HomeController {
                 map.put("post", post);
                 User user = userService.findUserById(post.getUserId());
                 map.put("user", user);
+
+                // 添加帖子的赞显示
+                map.put("likeCount",likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId()));
                 discussPosts.add(map);
             }
         }

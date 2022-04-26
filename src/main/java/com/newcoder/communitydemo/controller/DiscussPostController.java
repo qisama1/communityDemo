@@ -6,6 +6,7 @@ import com.newcoder.communitydemo.entity.Page;
 import com.newcoder.communitydemo.entity.User;
 import com.newcoder.communitydemo.service.CommentService;
 import com.newcoder.communitydemo.service.DiscussPostService;
+import com.newcoder.communitydemo.service.LikeService;
 import com.newcoder.communitydemo.service.UserService;
 import com.newcoder.communitydemo.util.CommunityUtil;
 import com.newcoder.communitydemo.util.HostHolder;
@@ -33,6 +34,9 @@ public class DiscussPostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
     /**
      * 添加帖子
      * @param title
@@ -65,6 +69,13 @@ public class DiscussPostController {
         // 作者
         User user = userService.findUserById(post.getUserId());
         model.addAttribute("user", user);
+        // 点赞信息
+        long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeCount", likeCount);
+        // 点赞状态，如果没有登录的话就只有赞这个显示
+        int likeStatus = hostHolder.getUser() == null ? 0 :
+                likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeStatus", likeStatus);
 
         // 评论信息
         page.setLimit(5);
@@ -86,6 +97,16 @@ public class DiscussPostController {
                 commentVo.put("comment", comment);
                 // 作者
                 commentVo.put("user", userService.findUserById(comment.getUserId()));
+
+                // 评论的点赞
+                likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, comment.getId());
+                commentVo.put("likeCount", likeCount);
+                // 点赞状态，如果没有登录的话就只有赞这个显示
+                likeStatus = hostHolder.getUser() == null ? 0 :
+                        likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_COMMENT, comment.getId());
+                commentVo.put("likeStatus", likeStatus);
+
+
                 // 回复
                 List<Comment> replyList = commentService.findCommentsByEntity(ENTITY_TYPE_COMMENT,
                         comment.getId(), 0, Integer.MAX_VALUE);
@@ -99,7 +120,17 @@ public class DiscussPostController {
                         // 作者
                         replyVo.put("user", userService.findUserById(reply.getUserId()));
                         // 回复目标
-                        User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
+                        User target = reply.getTargetId() == 0 ? null :
+                                userService.findUserById(reply.getTargetId());
+
+                        // 回复的点赞
+                        likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, reply.getId());
+                        replyVo.put("likeCount", likeCount);
+                        // 点赞状态，如果没有登录的话就只有赞这个显示
+                        likeStatus = hostHolder.getUser() == null ? 0 :
+                                likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_COMMENT, reply.getId());
+                        replyVo.put("likeStatus", likeStatus);
+
                         replyVo.put("target", target);
                         replyVoList.add(replyVo);
                     }
