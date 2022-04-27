@@ -34,4 +34,9 @@ public interface CommunityConstant {
      * 实体类型、常量
      */
     static final int ENTITY_TYPE_COMMENT = 2;
+
+    /**
+     * 实体类型：用户
+     */
+    static final int ENTITY_TYPE_USER = 3;
 }
