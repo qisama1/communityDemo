@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import java.io.*;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,5 +41,12 @@ public class MailTests {
         mailClient.sendMail("202121049993@mail.scut.edu.cn", "Test", "Welcome.");
     }
 
-
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            String str = br.readLine();
+            System.out.println(str);
+            if (str == null) return;
+        }
+    }
 }
